@@ -6,36 +6,20 @@ A static HTML/CSS/JavaScript portfolio intended to be reviewed locally before pu
 
 ```text
 Puneet-Portfolio/
-├── index.html
+├── index.html              # Single-page portfolio (Tailwind CDN, dark-mode toggle)
 ├── README.md
-├── about/
-│   └── index.html
-├── cv/
-│   └── index.html
-├── technical-writing/
-│   ├── index.html
-│   └── projects/
-│       └── fuel-dispenser-manual.html
-├── learning-design/
-│   └── index.html
-├── gamified-learning/
-│   └── index.html
-├── product/
-│   └── index.html
-├── ai-documentation/
+├── coming-soon.html        # Placeholder for assets still pending
+├── Puneet-Portfolio/       # Legacy redirect shim -> https://puncha1580.github.io/
 │   └── index.html
 └── assets/
-    ├── css/
-    │   └── styles.css
-    ├── js/
-    │   └── main.js
-    ├── documents/
-    ├── learning/
-    ├── games/
-    ├── presentations/
-    ├── cv/
+    ├── cv/                 # Puneet_CV.pdf
+    ├── documents/          # PDFs (fuel dispenser manual, lesson plans)
+    ├── games/              # Standalone HTML games (POSH Guardian, German Learning)
+    ├── learning/           # VILT modules, microlearning, CBTs
     └── images/
 ```
+
+Note: the earlier multi-page layout (about/, cv/, technical-writing/, etc.) was never implemented. The live site is a single monolithic index.html. Navigation is in-page anchor links (#hero, #learnings, #simulator, #articles, #timeline, #contact).
 
 ## Preview locally
 
