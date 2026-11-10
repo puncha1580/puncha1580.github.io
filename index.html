@@ -693,34 +693,97 @@
     document.getElementById('btn-copy-email')?.addEventListener('click', () => copyVal('chadhapuneetb@gmail.com', 'Email'));
     document.getElementById('btn-copy-phone')?.addEventListener('click', () => copyVal('+91 9136120509', 'Phone'));
 
-    // Basic Simulator Stub
+    // QDD Simulator — interactive
+    const scenarios = {
+      1: { query: 'ATM card', label: 'Telecom SIM Error',
+        log: [
+          ['0.05s','Context Monitor: Screen=\'view_card_settings\', Error=\'SIM_BINDING_FAILED\'','cyan'],
+          ['0.20s','Intent Ingestion: Resolved to SIM Binding recovery procedure.','cyan'],
+          ['0.45s','Auth Retrieval: RBAC partition verified for Retail Tier.','cyan'],
+          ['0.70s','Audit & Verify: 100% Chunk Match. Zero speculation enforced.','emerald'],
+          ['0.95s','Solution Articulated: 5-step action plan served.','emerald']
+        ],
+        result: `<div class="text-xs font-mono space-y-2">
+          <div class="text-emerald-600 dark:text-emerald-400 font-bold">✓ 1-Minute Procedural Fix Served:</div>
+          <ol class="list-decimal list-inside space-y-1 text-slate-700 dark:text-slate-300">
+            <li>Open Phone Settings → Set registered SIM as primary for SMS.</li>
+            <li>Verify SMS outgoing balance (at least ₹1.50 required).</li>
+            <li>Enable SMS &amp; Phone permissions for banking app.</li>
+            <li>Toggle Airplane Mode for 10s to refresh network latch.</li>
+            <li>Return to app and tap "Retry SIM Binding".</li>
+          </ol>
+        </div>`
+      },
+      2: { query: 'webhook 401', label: 'CCMS 401 Webhook',
+        log: [
+          ['0.05s','Context Monitor: Event=\'webhook_delivery\', Error=\'HTTP_401_UNAUTHORIZED\'','cyan'],
+          ['0.20s','Intent Ingestion: Resolved to CCMS webhook auth failure procedure.','cyan'],
+          ['0.45s','Auth Retrieval: Token expiry + scope mismatch detected.','cyan'],
+          ['0.70s','Audit & Verify: 100% Chunk Match. Zero speculation enforced.','emerald'],
+          ['0.95s','Solution Articulated: 4-step remediation plan served.','emerald']
+        ],
+        result: `<div class="text-xs font-mono space-y-2">
+          <div class="text-emerald-600 dark:text-emerald-400 font-bold">✓ Remediation Plan Served:</div>
+          <ol class="list-decimal list-inside space-y-1 text-slate-700 dark:text-slate-300">
+            <li>Regenerate the webhook signing secret in CCMS admin.</li>
+            <li>Update the endpoint URL with the new bearer token.</li>
+            <li>Replay the failed event from the dead-letter queue.</li>
+            <li>Verify 200 OK on the next delivery attempt.</li>
+          </ol>
+        </div>`
+      },
+      3: { query: 'asset lock', label: 'PLM Asset Lock',
+        log: [
+          ['0.05s','Context Monitor: Object=\'windchill_part\', State=\'CHECKED_OUT_LOCKED\'','cyan'],
+          ['0.20s','Intent Ingestion: Resolved to concurrent checkout recovery procedure.','cyan'],
+          ['0.45s','Auth Retrieval: RBAC partition verified for Engineering Tier.','cyan'],
+          ['0.70s','Audit & Verify: 100% Chunk Match. Zero speculation enforced.','emerald'],
+          ['0.95s','Solution Articulated: 3-step unlock plan served.','emerald']
+        ],
+        result: `<div class="text-xs font-mono space-y-2">
+          <div class="text-emerald-600 dark:text-emerald-400 font-bold">✓ Unlock Plan Served:</div>
+          <ol class="list-decimal list-inside space-y-1 text-slate-700 dark:text-slate-300">
+            <li>Identify the holding user via Windchill admin console.</li>
+            <li>Force-release the checkout lock (admin privilege required).</li>
+            <li>Re-checkout the asset under the requesting user.</li>
+          </ol>
+        </div>`
+      }
+    };
+
+    let activeScenario = 1;
+    function selectScenario(n) {
+      activeScenario = n;
+      const s = scenarios[n];
+      const input = document.getElementById('sim-input-query');
+      if (input) input.value = s.query;
+      document.querySelectorAll('.scenario-btn').forEach((b, i) => {
+        if (i + 1 === n) {
+          b.classList.remove('bg-slate-100','text-slate-700','border-slate-200');
+          b.classList.add('bg-blue-100','text-blue-800','border-blue-300','font-bold');
+        } else {
+          b.classList.remove('bg-blue-100','text-blue-800','border-blue-300','font-bold');
+          b.classList.add('bg-slate-100','text-slate-700','border-slate-200');
+        }
+      });
+    }
+    document.getElementById('scenario-btn-1')?.addEventListener('click', () => selectScenario(1));
+    document.getElementById('scenario-btn-2')?.addEventListener('click', () => selectScenario(2));
+    document.getElementById('scenario-btn-3')?.addEventListener('click', () => selectScenario(3));
+
     document.getElementById('btn-run-simulation')?.addEventListener('click', () => {
       const container = document.getElementById('sim-log-container');
       const resultBox = document.getElementById('sim-result-box');
+      const s = scenarios[activeScenario];
       if (container) {
-        container.innerHTML = `
-          <div class="text-cyan-400">[0.05s] Context Monitor: Screen='view_card_settings', Error='SIM_BINDING_FAILED'</div>
-          <div class="text-cyan-400">[0.20s] Intent Ingestion: Resolved to SIM Binding recovery procedure.</div>
-          <div class="text-cyan-400">[0.45s] Auth Retrieval: RBAC partition verified for Retail Tier.</div>
-          <div class="text-emerald-400">[0.70s] Audit & Verify: 100% Chunk Match. Zero speculation enforced.</div>
-          <div class="text-emerald-400 font-bold">[0.95s] Solution Articulated: 5-step action plan served.</div>
-        `;
+        container.innerHTML = s.log.map(([t,msg,c]) =>
+          `<div class="text-${c}-400">[${t}] ${msg}</div>`
+        ).join('');
       }
-      if (resultBox) {
-        resultBox.innerHTML = `
-          <div class="text-xs font-mono space-y-2">
-            <div class="text-emerald-600 font-bold">✓ 1-Minute Procedural Fix Served:</div>
-            <ol class="list-decimal list-inside space-y-1 text-slate-700 dark:text-slate-300">
-              <li>Open Phone Settings → Set registered SIM as primary for SMS.</li>
-              <li>Verify SMS outgoing balance (at least ₹1.50 required).</li>
-              <li>Enable SMS & Phone permissions for banking app.</li>
-              <li>Toggle Airplane Mode for 10s to refresh network latch.</li>
-              <li>Return to app and tap "Retry SIM Binding".</li>
-            </ol>
-          </div>
-        `;
-      }
+      if (resultBox) resultBox.innerHTML = s.result;
     });
+
+    selectScenario(1);
   </script>
 </body>
 </html>
